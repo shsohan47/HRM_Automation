@@ -103,7 +103,7 @@ describe("Hrm admin panel automation Script", () => {
     EditData();
   })
 
-  it.only("Comapny details functionality and edit company details function",()=>
+  it("edit company details functionality and check wether edit make change in UI also or not!",()=>
   {
     const editCompanyDetails=(companyName, mobileNumber, companyAddress, companyDetails)=>
     {
