@@ -25,7 +25,7 @@ describe("Hrm admin panel automation Script", () => {
       //visit the website
       cy.visit("/login-form");
       // check weather the url we visit is valid & correct
-      cy.url().should("eq", "/login-form");
+      cy.url().should("eq", "https://hrm.aamarpay.dev/login-form");
       //get the email field
       cy.get('[name="email"]').type("hr-2@aamarpay.com");
       //get password field
@@ -37,14 +37,14 @@ describe("Hrm admin panel automation Script", () => {
       //visit the website
       cy.visit("/login-form");
       // check weather the url we visit is valid & correct
-      cy.url().should("eq", "/login-form");
+      cy.url().should("eq", "https://hrm.aamarpay.dev/login-form");
       //get the email field
       cy.get('[name="email"]').type("a@gmail.com");
       //get password field
       cy.get('[name="password"]').type("123456789");
       //click the login button
       cy.get(".btn.btn-primary.account-btn").click();
-      cy.url().should("eq", "/department");
+      cy.url().should("eq", "https://hrm.aamarpay.dev/department");
     }
   );
   //Invalid Login Functionality
