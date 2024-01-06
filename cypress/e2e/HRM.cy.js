@@ -24,7 +24,7 @@ describe("Hrm admin panel automation Script", () => {
     cy.wait(3000);
   };
 
-  const EditData = () => {
+  const EditData = (name,details) => {
     //cy.get(".form-control.form-control-sm").eq(1).type(name);
     cy.get("table tbody tr:first-child").as("editData");
 
@@ -38,8 +38,8 @@ describe("Hrm admin panel automation Script", () => {
     })
     cy.get("#deptName").clear()
     cy.get("#details").clear()
-    cy.get("#deptName").type("people Care V2");
-    cy.get("#details").type("people Care Department V2 edited");
+    cy.get("#deptName").type(name);
+    cy.get("#details").type(details);
 
     cy.get(".btn.btn-primary.submit-btn").click({ multiple: true,force: true });
     cy.wait(3000);
@@ -100,7 +100,7 @@ describe("Hrm admin panel automation Script", () => {
   });
   it("Edit department functionality",()=>
   {
-    EditData();
+    EditData("people Care V2","people Care Department V2 edited");
   })
 
   it("edit company details functionality and check wether edit make change in UI also or not!",()=>
@@ -108,7 +108,7 @@ describe("Hrm admin panel automation Script", () => {
     const editCompanyDetails=(companyName, mobileNumber, companyAddress, companyDetails)=>
     {
       cy.visit('/company');
-      cy.get('.pro-edit > .edit-icon > .fa-solid').click();
+      cy.get('.pro-edit > .edit-icon > .fa-solid').click({force: true});
       cy.get('.col-md-12 > .row > :nth-child(1) > .input-block > .form-control').clear().type(companyName)
       cy.get('.col-md-12 > .row > :nth-child(2) > .input-block > .form-control').clear().type(mobileNumber)
       cy.get('form > :nth-child(2) > :nth-child(1) > .input-block > .form-control').clear().type(companyAddress)
@@ -126,6 +126,62 @@ describe("Hrm admin panel automation Script", () => {
   })
 
 
+//Create Office Location
+//Developer didnt work with that requirements
+  // it.only("Create Office location Functionality!!", ()=>
+  // {
+  //   cy.visit('/office-location');
+  // })
+
+
+  //Edit Office Location
+it("Edit Office location Functionality(edit & Submit)!!", ()=>
+  
+{
+     cy.visit('/office-location');
+     cy.get("table tbody tr:first-child").as("editData");
+
+    cy.get("@editData").within(() => {
+      cy.get("td").last().find(".material-icons").click();
+    });
+    cy.get(".dropdown-menu.dropdown-menu-right.show")
+    .within(()=>
+    {
+      cy.contains("Edit").click({force:true})
+    })
+    cy.get('#locationName').clear({force:true,multiple:true})
+    cy.get('#longitude1').clear()
+    cy.get('#latitude1').clear()
+    cy.get('#radius').clear()
+    cy.get('#locationName').type("Automation Office Location Name",{force:true,multiple:true});
+    //clicking and check weather this button can filled the latitude and longitude field
+    cy.get('#edit_department > .modal-dialog > .modal-content > .modal-body > .btn-info').click();
+    cy.get('#longitude1').should('not.have.value','');
+    cy.get('#latitude1').should('not.have.value','');
+    cy.get('#radius').type("0.67");
+    cy.get('#editSubmit > .submit-section > .btn').click({ multiple: true,force: true });
+    cy.wait(3000)
+    //cy.get('.swal2-popup.swal2-modal.swal2-icon-error.swal2-show').should('not.be.visible');
+     cy.get('table tbody tr td').eq(1).should('contain',"Automation Office Location Name");
+
+   })
+
+   //status should not hidden
+   it("Status field should not Hidden When Edit Office Location",()=>
+   {
+    cy.visit('/office-location');
+     cy.get("table tbody tr:first-child").as("editData");
+
+    cy.get("@editData").within(() => {
+      cy.get("td").last().find(".material-icons").click();
+    });
+    cy.get(".dropdown-menu.dropdown-menu-right.show")
+    .within(()=>
+    {
+      cy.contains("Edit").click({force:true})
+    })
+    cy.get("[name='status']").should("not.be.hidden")
+   })
 });
 
 
