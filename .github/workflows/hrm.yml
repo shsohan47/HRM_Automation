@@ -10,13 +10,9 @@ jobs:
       # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v6
-
-
-
-
-- name: Upload screenshots
-  uses: actions/upload-artifact@v3
-  if: failure()
-  with:
-    name: cypress-screenshots
-    path: cypress/screenshots
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
