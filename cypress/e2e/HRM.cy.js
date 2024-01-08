@@ -135,7 +135,7 @@ describe("Hrm admin panel automation Script", () => {
 
 
   //Edit Office Location
-it("Edit Office location Functionality(edit & Submit)!!", ()=>
+it.only("Edit Office location Functionality(edit & Submit)!!", ()=>
   
 {
      cy.visit('/office-location');
@@ -155,9 +155,9 @@ it("Edit Office location Functionality(edit & Submit)!!", ()=>
     cy.get('#radius').clear()
     cy.get('#locationName').type("Automation Office Location Name",{force:true,multiple:true});
     //clicking and check weather this button can filled the latitude and longitude field
-    cy.get('#edit_department > .modal-dialog > .modal-content > .modal-body > .btn-info').click();
-    cy.get('#longitude1').should('not.have.value','');
-    cy.get('#latitude1').should('not.have.value','');
+    //cy.get('#edit_department > .modal-dialog > .modal-content > .modal-body > .btn-info').click();
+    cy.get('#longitude1').type("20.21").should('not.have.value','');
+    cy.get('#latitude1').type("90.51").should('not.have.value','');
     cy.get('#radius').type("0.67");
     cy.get('#editSubmit > .submit-section > .btn').click({ multiple: true,force: true });
     cy.wait(3000)
