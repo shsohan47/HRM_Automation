@@ -135,7 +135,7 @@ describe("Hrm admin panel automation Script", () => {
 
 
   //Edit Office Location
-it.only("Edit Office location Functionality(edit & Submit)!!", ()=>
+it("Edit Office location Functionality(edit & Submit)!!", ()=>
   
 {
      cy.visit('/office-location');
