@@ -1,7 +1,4 @@
-import 'cypress-file-upload';
-
-
-
+import "cypress-file-upload";
 
 describe("Hrm admin panel automation Script", () => {
   Cypress.on("uncaught:exception", (err, runnable) => {
@@ -20,33 +17,32 @@ describe("Hrm admin panel automation Script", () => {
     cy.get("@deleteData").within(() => {
       cy.get("td").last().find(".material-icons").click();
     });
-    cy.get(".dropdown-menu.dropdown-menu-right.show")
-    .within(()=>
-    {
-      cy.contains("Delete").click({force:true})
-    })
+    cy.get(".dropdown-menu.dropdown-menu-right.show").within(() => {
+      cy.contains("Delete").click({ force: true });
+    });
     cy.get(".btn.btn-primary.continue-btn").click({ force: true });
     cy.wait(3000);
   };
 
-  const EditData = (name,details) => {
+  const EditData = (name, details) => {
     //cy.get(".form-control.form-control-sm").eq(1).type(name);
     cy.get("table tbody tr:first-child").as("editData");
 
     cy.get("@editData").within(() => {
       cy.get("td").last().find(".material-icons").click();
     });
-    cy.get(".dropdown-menu.dropdown-menu-right.show")
-    .within(()=>
-    {
-      cy.contains("Edit").click({force:true})
-    })
-    cy.get("#deptName").clear()
-    cy.get("#details").clear()
+    cy.get(".dropdown-menu.dropdown-menu-right.show").within(() => {
+      cy.contains("Edit").click({ force: true });
+    });
+    cy.get("#deptName").clear();
+    cy.get("#details").clear();
     cy.get("#deptName").type(name);
     cy.get("#details").type(details);
 
-    cy.get(".btn.btn-primary.submit-btn").click({ multiple: true,force: true });
+    cy.get(".btn.btn-primary.submit-btn").click({
+      multiple: true,
+      force: true,
+    });
     cy.wait(3000);
   };
 
@@ -95,116 +91,145 @@ describe("Hrm admin panel automation Script", () => {
   });
   it("Search and delete functionality in department panel!", () => {
     //Department search button functionality
-    cy.get(".form-control.form-control-sm").eq(1).type("demo department description");
-    cy.get("table").contains("td", "demo department description").should("exist");
+    cy.get(".form-control.form-control-sm")
+      .eq(1)
+      .type("demo department description");
+    cy.get("table")
+      .contains("td", "demo department description")
+      .should("exist");
     //CLEAR SEARCH FIELD
     cy.get(".form-control.form-control-sm").eq(1).clear();
     //delete the created data
     deleteData(name);
     //For commit actions
   });
-  it("Edit department functionality",()=>
-  {
-    EditData("people Care V2","people Care Department V2 edited");
-  })
+  it("Edit department functionality", () => {
+    EditData("people Care V2", "people Care Department V2 edited");
+  });
 
-  it("edit company details functionality and check wether edit make change in UI also or not!",()=>
-  {
-    const editCompanyDetails=(companyName, mobileNumber, companyAddress, companyDetails)=>
-    {
-      cy.visit('/company');
-      cy.get('.pro-edit > .edit-icon > .fa-solid').click({force: true});
-      cy.get('.col-md-12 > .row > :nth-child(1) > .input-block > .form-control').clear().type(companyName)
-      cy.get('.col-md-12 > .row > :nth-child(2) > .input-block > .form-control').clear().type(mobileNumber)
-      cy.get('form > :nth-child(2) > :nth-child(1) > .input-block > .form-control').clear().type(companyAddress)
-      cy.get('form > :nth-child(2) > :nth-child(2) > .input-block > .form-control').clear().type(companyDetails)
-      cy.get('.submit-section > .btn').click();
-    //cy.get('.profile-img').invoke('image').should('contain', image);
-    cy.get('.user-name.m-t-0.mb-0').invoke('text').should('contain', companyName)
-    cy.get('.col-md-7 > .personal-info > :nth-child(3) > .text').invoke('text').should('contain', companyDetails)
-    cy.get('.col-md-7 > .personal-info > :nth-child(4) > .text').invoke('text').should('contain', companyAddress)
-    cy.get(':nth-child(1) > .text > a').invoke('text').should('contain', mobileNumber)
-    cy.log()
-    }
-    editCompanyDetails("Company1", "01953714653", "Dhaka Narayanganj", "Fintech Company")
+  it("edit company details functionality and check wether edit make change in UI also or not!", () => {
+    const editCompanyDetails = (
+      companyName,
+      mobileNumber,
+      companyAddress,
+      companyDetails
+    ) => {
+      cy.visit("/company");
+      cy.get(".pro-edit > .edit-icon > .fa-solid").click({ force: true });
+      cy.get(".col-md-12 > .row > :nth-child(1) > .input-block > .form-control")
+        .clear()
+        .type(companyName);
+      cy.get(".col-md-12 > .row > :nth-child(2) > .input-block > .form-control")
+        .clear()
+        .type(mobileNumber);
+      cy.get(
+        "form > :nth-child(2) > :nth-child(1) > .input-block > .form-control"
+      )
+        .clear()
+        .type(companyAddress);
+      cy.get(
+        "form > :nth-child(2) > :nth-child(2) > .input-block > .form-control"
+      )
+        .clear()
+        .type(companyDetails);
+      cy.get(".submit-section > .btn").click();
+      //cy.get('.profile-img').invoke('image').should('contain', image);
+      cy.get(".user-name.m-t-0.mb-0")
+        .invoke("text")
+        .should("contain", companyName);
+      cy.get(".col-md-7 > .personal-info > :nth-child(3) > .text")
+        .invoke("text")
+        .should("contain", companyDetails);
+      cy.get(".col-md-7 > .personal-info > :nth-child(4) > .text")
+        .invoke("text")
+        .should("contain", companyAddress);
+      cy.get(":nth-child(1) > .text > a")
+        .invoke("text")
+        .should("contain", mobileNumber);
+      cy.log();
+    };
+    editCompanyDetails(
+      "Company1",
+      "01953714653",
+      "Dhaka Narayanganj",
+      "Fintech Company"
+    );
+  });
 
-  })
-
-
-//Create Office Location
-//Developer didnt work with that requirements
+  //Create Office Location
+  //Developer didnt work with that requirements
   // it.only("Create Office location Functionality!!", ()=>
   // {
   //   cy.visit('/office-location');
   // })
 
+  //Search functionality
 
+  function Search(name) {
+    cy.get('input[type="search"]').type(name);
+    cy.get("table tr td").contains(name).should("exist");
+  }
   //Edit Office Location
-it("Edit Office location Functionality(edit & Submit)!!", ()=>
-  
-{
-     cy.visit('/office-location');
-     cy.get("table tbody tr:first-child").as("editData");
+  it("Edit Office location Functionality(edit & Submit)!!", () => {
+    cy.visit("/office-location");
+    cy.get("table tbody tr:first-child").as("editData");
 
     cy.get("@editData").within(() => {
       cy.get("td").last().find(".material-icons").click();
     });
-    cy.get(".dropdown-menu.dropdown-menu-right.show")
-    .within(()=>
-    {
-      cy.contains("Edit").click({force:true})
-    })
-    cy.get('#locationName').clear({force:true,multiple:true})
-    cy.get('#longitude1').clear()
-    cy.get('#latitude1').clear()
-    cy.get('#radius').clear()
-    cy.get('#locationName').type("Automation Office Location Name",{force:true,multiple:true});
+    cy.get(".dropdown-menu.dropdown-menu-right.show").within(() => {
+      cy.contains("Edit").click({ force: true });
+    });
+    cy.get("#locationName").clear({ force: true, multiple: true });
+    cy.get("#longitude1").clear();
+    cy.get("#latitude1").clear();
+    cy.get("#radius").clear();
+    cy.get("#locationName").type("Automation Office Location Name", {
+      force: true,
+      multiple: true,
+    });
     //clicking and check weather this button can filled the latitude and longitude field
     //cy.get('#edit_department > .modal-dialog > .modal-content > .modal-body > .btn-info').click();
-    cy.get('#longitude1').type("20.21").should('not.have.value','');
-    cy.get('#latitude1').type("90.51").should('not.have.value','');
-    cy.get('#radius').type("0.67");
-    cy.get('#editSubmit > .submit-section > .btn').click({ multiple: true,force: true });
-    cy.wait(3000)
+    cy.get("#longitude1").type("20.21").should("not.have.value", "");
+    cy.get("#latitude1").type("90.51").should("not.have.value", "");
+    cy.get("#radius").type("0.67");
+    cy.get("#editSubmit > .submit-section > .btn").click({
+      multiple: true,
+      force: true,
+    });
+    cy.wait(3000);
     //cy.get('.swal2-popup.swal2-modal.swal2-icon-error.swal2-show').should('not.be.visible');
-     cy.get('table tbody tr td').eq(1).should('contain',"Automation Office Location Name");
+    cy.get("table tbody tr td")
+      .eq(1)
+      .should("contain", "Automation Office Location Name");
+  });
 
-   })
-
-   //status should not hidden
-   it("Status field should not Hidden When Edit Office Location",()=>
-   {
-    cy.visit('/office-location');
-     cy.get("table tbody tr:first-child").as("editData");
+  //status should not hidden
+  it("Status field should not Hidden When Edit Office Location", () => {
+    cy.visit("/office-location");
+    cy.get("table tbody tr:first-child").as("editData");
 
     cy.get("@editData").within(() => {
       cy.get("td").last().find(".material-icons").click();
     });
-    cy.get(".dropdown-menu.dropdown-menu-right.show")
-    .within(()=>
-    {
-      cy.contains("Edit").click({force:true})
-    })
-    cy.get("[name='status']").should("not.be.hidden")
-   })
+    cy.get(".dropdown-menu.dropdown-menu-right.show").within(() => {
+      cy.contains("Edit").click({ force: true });
+    });
+    cy.get("[name='status']").should("not.be.hidden");
+  });
 
-//File upload function
-function FileUpload(filePath, filename)
-{
-  cy.readFile(filePath,'binary').then((fileContent)=>
-  {
-    cy.get(':nth-child(7) > .input-block > .form-control').attachFile(
-      {
-        fileContent:fileContent.toString('base64'),
+  //File upload function
+  function FileUpload(filePath, filename) {
+    cy.readFile(filePath, "binary").then((fileContent) => {
+      cy.get(":nth-child(7) > .input-block > .form-control").attachFile({
+        fileContent: fileContent.toString("base64"),
         fileName: filename,
-        mimeType: 'image/jpeg'
-      }
-    );
-  })
-
-}
-   //Employee Test Script
-   //=============================================================================
+        mimeType: "image/jpeg",
+      });
+    });
+  }
+  //Employee Test Script
+  //=============================================================================
   //  it.only("Add Invalid Employee(Test Case) Functionality",()=>
   //  {
   //   //
@@ -224,38 +249,53 @@ function FileUpload(filePath, filename)
   //     cy.wait(500)
   //     cy.get(".select2-results__option.select2-results__option--selectable.select2-results__option--highlighted")
   //   });
-    
+
   //  })
 
-
-
-  //Leave Test Script 
+  //Leave Test Script
   //====================================================
   //Leave application list
-  it.only("Fetch leave application list and test other functionality",()=>
-  {
+  it.only("Fetch leave application list and test other functionality", () => {
     //Api status Testing
     const leave_application_url = "/leave-application-list";
-    cy.request(leave_application_url).then((response)=>
-    {
-      if(response.status ===500)
-      {
+    cy.request(leave_application_url).then((response) => {
+      if (response.status === 500) {
         cy.log("The server responding 500 internal server error");
-      }
-      else
-      {
+      } else {
         expect(response.status).to.eq(200);
       }
-    })
+    });
     cy.visit("/leave-application-list");
 
     //page data count testing (10)
-    cy.get('.custom-select').select("10")
-    cy.get("table tr").should("have.length",10+1);//add 1 because it also include table head
+    cy.get(".custom-select").select("10");
+    cy.get("table tr").should("have.length", 10 + 1); //add 1 because it also include table head
     //for 25
-    cy.get('.custom-select').select("25")
-    cy.get("table tr").should("have.length",25+1);//add 1 because it also include table head
-  })
+    cy.get(".custom-select").select("25");
+    cy.get("table tr").should("have.length", 25 + 1); //add 1 because it also include table head
+    //Search
+    Search("Pending");
+
+    //Edit Leave application list
+    cy.get("table tr:nth-child(1) td:last").find(".material-icons").click().get(".dropdown-menu.dropdown-menu-right.show").as("edit_icon")
+    cy.get("@edit_icon").within(()=>
+    {
+      cy.contains("Edit").click();
+      
+    })
+    cy.get('#name').should('have.attr','disabled');
+    cy.get('#start_date').should('have.attr','disabled');
+    cy.get('#end_date').should('have.attr','disabled');
+    cy.get('#reason').should('have.attr','disabled');
+    cy.get('.select2-selection__rendered').click()
+    cy.get(".select2-results__options").within(()=>
+    {
+      cy.contains("Pending").click({force:true});
+    });
+    cy.wait(2000);
+    cy.get(".btn.btn-primary.submit-btn").click({force:true})
+
+
+  });
+
 });
-
-
