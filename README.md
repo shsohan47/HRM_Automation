@@ -11,3 +11,7 @@ Functionality Completed
 # Status field should not Hidden When Edit Office Location
 # Employee leave application list status code check
 # Page table row count test case
+# Search functionality testing
+# Delete Row
+# Edit Row
+# attendance functionality (add , edit, search )

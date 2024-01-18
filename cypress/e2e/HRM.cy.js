@@ -169,6 +169,16 @@ describe("Hrm admin panel automation Script", () => {
     cy.get('input[type="search"]').type(name);
     cy.get("table tr td").contains(name).should("exist");
   }
+function response (Url_name)
+{
+  cy.request(Url_name).then((response) => {
+    if (response.status === 500) {
+      cy.log("The server responding 500 internal server error");
+    } else {
+      expect(response.status).to.eq(200);
+    }
+  });
+}
   //Edit Office Location
   it("Edit Office location Functionality(edit & Submit)!!", () => {
     cy.visit("/office-location");
@@ -255,16 +265,10 @@ describe("Hrm admin panel automation Script", () => {
   //Leave Test Script
   //====================================================
   //Leave application list
-  it.only("Fetch leave application list and test other functionality", () => {
+  it("Fetch leave application list and test other functionality", () => {
     //Api status Testing
     const leave_application_url = "/leave-application-list";
-    cy.request(leave_application_url).then((response) => {
-      if (response.status === 500) {
-        cy.log("The server responding 500 internal server error");
-      } else {
-        expect(response.status).to.eq(200);
-      }
-    });
+    response(leave_application_url);
     cy.visit("/leave-application-list");
 
     //page data count testing (10)
@@ -293,9 +297,75 @@ describe("Hrm admin panel automation Script", () => {
       cy.contains("Pending").click({force:true});
     });
     cy.wait(2000);
-    cy.get(".btn.btn-primary.submit-btn").click({force:true})
+    cy.get(".btn.btn-primary.submit-btn").click({force:true});
+    cy.get('.swal2-confirm').click();
+    cy.wait(2000);
 
+    //Delete Leave Application List
+    cy.get("table tr:nth-child(1) td:last").find(".material-icons").click().get(".dropdown-menu.dropdown-menu-right.show").as("delete_icon")
+    cy.get("@delete_icon").within(()=>
+    {
+      cy.contains("Delete").click({force:true});
+      
+    })
+    cy.get('#delete_leaveApplication > .modal-dialog > .modal-content > .modal-body').wait(2000).within(()=>
+      {
+        cy.get("#deptDelete > .btn").click({force:true});
+      })
 
   });
+
+
+  //Test Script For Attendance Functionality 
+  it.only("Test Script For Attendance Functionality Add attendance Search Attendance",()=>
+  {
+    response("/attendance-list")
+    cy.visit("/attendance-list");
+    cy.get(".btn.add-btn").click();
+    //Add Attendance
+    cy.get('#add_department > .modal-dialog > .modal-content > .modal-body').as("add_attendance_modal")
+    cy.get("@add_attendance_modal").wait(1000).within(()=>
+    {
+      cy.get(".select2-selection__rendered").eq(0).click();
+    })
+    cy.get(".select2-results__options").within(()=>
+    {
+      cy.contains("Md Shawkat Hossain sohan").click();
+    })
+
+    cy.get("@add_attendance_modal").wait(1000).within(()=>
+    {
+      cy.get(".select2-selection__rendered").eq(1).click();
+    })
+    cy.get(".select2-results__options").within(()=>
+    {
+      cy.contains("Check In").click();
+    })
+
+    cy.get("@add_attendance_modal").wait(1000).within(()=>
+    {
+      cy.get('.form-control').eq(0).type("2024-01-28T10:00:00");
+    })
+    //Submit and but should not accept the submission withoiut reason
+
+    cy.get('#msform > .submit-section > .btn').click();
+    cy.get('#msform > .submit-section > .btn').should("be.visible");
+    cy.get('.swal2-confirm').click();
+    
+
+    cy.get("@add_attendance_modal").wait(1000).within(()=>
+    {
+      cy.get('.form-control').eq(1).type("Test Reason");
+    })
+    cy.get('#msform > .submit-section > .btn').click();
+
+
+    //Check weather this attendance include in database or not
+    cy.get('.form-control').type("2024-01-28T10:00:00");
+    cy.get('[style="margin-top: 18px;"] > .btn').click();
+    cy.get("table td:nth-child(2)").should("contains","1/28/2024")
+
+
+  })
 
 });
