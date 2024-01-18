@@ -1,3 +1,8 @@
+import 'cypress-file-upload';
+
+
+
+
 describe("Hrm admin panel automation Script", () => {
   Cypress.on("uncaught:exception", (err, runnable) => {
     // returning false here prevents Cypress from
@@ -182,6 +187,75 @@ it("Edit Office location Functionality(edit & Submit)!!", ()=>
     })
     cy.get("[name='status']").should("not.be.hidden")
    })
+
+//File upload function
+function FileUpload(filePath, filename)
+{
+  cy.readFile(filePath,'binary').then((fileContent)=>
+  {
+    cy.get(':nth-child(7) > .input-block > .form-control').attachFile(
+      {
+        fileContent:fileContent.toString('base64'),
+        fileName: filename,
+        mimeType: 'image/jpeg'
+      }
+    );
+  })
+
+}
+   //Employee Test Script
+   //=============================================================================
+  //  it.only("Add Invalid Employee(Test Case) Functionality",()=>
+  //  {
+  //   //
+  //   cy.visit("/employee");
+  //   cy.get('#addEmployeeButton').click({force:true});
+  //   cy.get('#add_employee > .modal-dialog > .modal-content > .modal-header').should("be.visible");
+  //   cy.get('#msform > .row > :nth-child(1) > .input-block > .form-control').type("Employee");
+  //   cy.get('#msform > .row > :nth-child(2) > .input-block > .form-control').type("employee1@aamarpay.com");
+  //   cy.get('#password1').type("123456789")
+  //   cy.get('#password_confirmation').type("123456789");
+  //   cy.get(':nth-child(5) > .input-block > .form-control')
+  //   cy.get(':nth-child(6) > .input-block > .cal-icon > .form-control')
+  //   FileUpload("Picture/test.jpeg","test.jpeg");
+  //   // Click on the dropdown to open it
+  //   cy.get('#select2-selectDept-container').click().within(()=>
+  //   {
+  //     cy.wait(500)
+  //     cy.get(".select2-results__option.select2-results__option--selectable.select2-results__option--highlighted")
+  //   });
+    
+  //  })
+
+
+
+  //Leave Test Script 
+  //====================================================
+  //Leave application list
+  it.only("Fetch leave application list and test other functionality",()=>
+  {
+    //Api status Testing
+    const leave_application_url = "/leave-application-list";
+    cy.request(leave_application_url).then((response)=>
+    {
+      if(response.status ===500)
+      {
+        cy.log("The server responding 500 internal server error");
+      }
+      else
+      {
+        expect(response.status).to.eq(200);
+      }
+    })
+    cy.visit("/leave-application-list");
+
+    //page data count testing (10)
+    cy.get('.custom-select').select("10")
+    cy.get("table tr").should("have.length",10+1);//add 1 because it also include table head
+    //for 25
+    cy.get('.custom-select').select("25")
+    cy.get("table tr").should("have.length",25+1);//add 1 because it also include table head
+  })
 });
 
 

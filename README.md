@@ -9,3 +9,5 @@ Functionality Completed
 # Edit Company Details functionality and check weather edit make change in UI also or not!!!
 # Edit Office location Functionality(edit & Submit)!!
 # Status field should not Hidden When Edit Office Location
+# Employee leave application list status code check
+# Page table row count test case
