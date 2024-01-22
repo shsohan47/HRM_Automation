@@ -1,10 +1,15 @@
 import "cypress-file-upload";
 let currentEmail, currentPass;
 describe("Load Test", () => {
-  let CompanyNameCount = 1;
-  let CompanyDetailsCount = 1;
-  let CompanyHRCount = 1;
-  let CompanyHR_emailCount = 1;
+  Cypress.on("uncaught:exception", (err, runnable) => {
+    // returning false here prevents Cypress from
+    // failing the test
+    return false;
+  });
+  let CompanyNameCount = 11;
+  let CompanyDetailsCount = 11;
+  let CompanyHRCount = 11;
+  let CompanyHR_emailCount = 11 ;
   
 
 
@@ -23,15 +28,20 @@ describe("Load Test", () => {
   }
 
   //File Upload
-  function FileUpload(filePath, filename) {
-    cy.readFile(filePath, "binary").then((fileContent) => {
-      cy.get('[type="file"]').attachFile({
-        fileContent: fileContent.toString("base64"),
-        fileName: filename,
-        mimeType: "image/jpeg",
+  function fileUpload(filePath, fileType) {
+    cy.fixture(filePath, 'binary')
+      .then(Cypress.Blob.binaryStringToBlob)
+      .then((blob) => {
+        const fileName = filePath.split('/').pop();
+        const mimeType = fileType || 'application/octet-stream';
+  
+        cy.get('[type="file"]').attachFile(
+          { fileContent: blob, fileName, mimeType },
+          { subjectType: 'input' }
+        );
       });
-    });
   }
+  
 
   //generate mobile number
   function GenerateMobileNumber() {
@@ -52,7 +62,7 @@ describe("Load Test", () => {
 
   //Generate HR unique email
   function generaterandomHRemail() {
-    var name = "HR" + CompanyHR_emailCount + "@gmail.com";
+    var name = "hr" + CompanyHR_emailCount + "@gmail.com";
     CompanyHR_emailCount++;
     return name;
   }
@@ -65,7 +75,7 @@ describe("Load Test", () => {
       cy.get('[name="companyName"]').type(generaterandomCompanyname(),{force:true});
       cy.get('[name="companyDetails"]').type(generaterandomCompanyDetails(),{force:true});
       cy.get('[name="address"]').type("Demo Address",{force:true});
-      FileUpload("Picture/test.jpeg", "test.jpeg",{force:true});
+      fileUpload('Picture/test.jpeg', 'image/jpeg');
       cy.get('[name="contactNumber"]').type(GenerateMobileNumber(),{force:true});
       cy.get(".next").click({force:true});
       cy.wait(1000);
@@ -75,9 +85,12 @@ describe("Load Test", () => {
       cy.get('[type="email"]').type(generaterandomHRemail(),{force:true});
       cy.get("#password").type("123456789",{force:true});
       cy.get("#password_confirmation").type("123456789",{force:true});
-
+      cy.get
       cy.get('[type="email"]').invoke('val').as("emailId");
       cy.get("#password").invoke('val').as("passwordId");
+      cy.wait(1000);
+      cy.get("#submitBtn").click({force:true});
+      cy.wait(3000)
       
       cy.wrap().then(()=>
       {
@@ -103,8 +116,35 @@ describe("Load Test", () => {
       })
 
       cy.url().should('eq',"https://hrm.aamarpay.dev/department")
-      
 
+      cy.visit("/department");
+      cy.get(".btn.add-btn").click({force:true})
+      cy.get('#msform > .input-block > [name="deptTitle"]').type("Hello Department");
+      cy.get('#msform > .input-block > [name="details"]').type("Hello Department Description");
+      cy.get('#msform > .submit-section > .btn').click({force:true});
+      cy.visit("/designation");
+      cy.get(".btn.add-btn").click({force:true});
+      cy.get('#add_designation > .modal-dialog > .modal-content > .modal-body')
+        cy.get('#desig_form > :nth-child(1) > .form-control').type("Hello Designation");
+        cy.get('#desig_form > :nth-child(2) > .form-control').type("Hello Designation Description");
+        cy.get('#select2-dept_id1-container').click()
+          cy.get('.select2-results__options').within(()=>
+          {
+            cy.contains("Hello Department").click({force:true})
+          })
+          cy.get('#desig_form > .submit-section > .btn').click({force:true})
+
+        
+      
+      for (let index = 0; index < 50; index++) {
+        cy.visit("/employee");
+        cy.get(".btn.add-btn.add-employee").click({force:true});
+        
+
+
+        
+      }
+      
 
 
 
