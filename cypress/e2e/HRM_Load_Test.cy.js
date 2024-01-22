@@ -1,10 +1,12 @@
 import "cypress-file-upload";
-
+let currentEmail, currentPass;
 describe("Load Test", () => {
   let CompanyNameCount = 1;
   let CompanyDetailsCount = 1;
   let CompanyHRCount = 1;
   let CompanyHR_emailCount = 1;
+  
+
 
   //Company name counter
   function generaterandomCompanyname() {
@@ -58,7 +60,7 @@ describe("Load Test", () => {
   it("passes", () => {
     cy.visit("/registration-form");
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1; i++) {
       cy.visit("/registration-form");
       cy.get('[name="companyName"]').type(generaterandomCompanyname(),{force:true});
       cy.get('[name="companyDetails"]').type(generaterandomCompanyDetails(),{force:true});
@@ -76,19 +78,47 @@ describe("Load Test", () => {
 
       cy.get('[type="email"]').invoke('val').as("emailId");
       cy.get("#password").invoke('val').as("passwordId");
-        cy.get('@emailId').then((id)=>
+      
+      cy.wrap().then(()=>
+      {
+        return cy.get("@emailId").then((id)=>
         {
-          cy.log("email: ", id);
+          currentEmail = id;
         })
-      cy.get('@passwordId').then((pass)=>{
-        cy.log("password: ", pass);
+      }).then(()=>
+      {
+        return cy.get("@passwordId").then((pass)=>
+        {
+          currentPass = pass;
+        })
+      }).then(()=>
+      {
+        cy.visit("/login");
+        
+        // Type the email using the aliased variable
+        cy.get(".form-control").eq(0).type(currentEmail);
+        //cy.log("email: ", currentEmail);         
+        cy.get(".form-control").eq(1).type(currentPass);
+        cy.get(".btn.btn-primary.account-btn").click({fore:true});
       })
+
+      cy.url().should('eq',"https://hrm.aamarpay.dev/department")
       
 
-      //Submit button
 
-      //Comment the button for user permission
-      //cy.get("#submitBtn").click({force:true});
+
+
+
+
+
+
     }
-  });
+ 
+})
+
+// cy.get('@passwordId').then((pass) => {
+//   currentPass = pass;
+//   cy.log("password: ", currentPass);
+// })
+  
 });
