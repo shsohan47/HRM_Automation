@@ -8,4 +8,5 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
   },
+  "redirectionLimit": 1234567890987654
 });
