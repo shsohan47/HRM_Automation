@@ -20,7 +20,7 @@ describe("Load Test", () => {
   }
   //Generate fully random email for employee
   function generaterandomEmployeeEmail() {
-    var Details = "employee" + Math.random() * Math.pow(10,4)+"@gmail.com";
+    var Details = "employee" + Math.floor(Math.random() * Math.pow(10,8))+"@gmail.com";
     
     return Details;
   }
@@ -81,7 +81,7 @@ describe("Load Test", () => {
   it("passes", () => {
     cy.visit("/registration-form");
 
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 500; i++) {
       cy.visit("/registration-form");
       cy.get('[name="companyName"]').type(generaterandomCompanyname(), {
         force: true,
@@ -164,8 +164,27 @@ describe("Load Test", () => {
         cy.get('#password1').type("123456789");
         cy.get('#password_confirmation').type("123456789");
         cy.get(':nth-child(5) > .input-block > .form-control').type(GenerateMobileNumber());
-        cy.get(':nth-child(6) > .input-block > .cal-icon > .form-control').type("1998-01-28");
-        
+        cy.get(':nth-child(6) > .input-block > .cal-icon > .form-control').clear().type("1998-01-28");
+        cy.get('#select2-selectDept-container').click({force:true})
+        cy.get('.select2-dropdown.select2-dropdown--below').within(()=>
+        {
+          cy.contains("Hello Department").click({force:true})
+        })
+        cy.get('#msform > .row > :nth-child(8) > .input-block > .select2 > .selection > .select2-selection > .select2-selection__arrow > b').click({force:true})
+        cy.get('.select2-dropdown.select2-dropdown--below').within(()=>
+        {
+          cy.contains("Male").click({force:true});
+          
+        })
+        cy.wait(1000)
+        cy.get('#select2-desig_id-container').click({force:true})
+        cy.get('.select2-dropdown.select2-dropdown--below').within(()=>
+        {
+          cy.contains("Hello Designation").click({force:true});
+        })
+        cy.get('#msform > .submit-section > .btn').click({force:true});
+        cy.wait(1000);
+
       }
     }
   });
