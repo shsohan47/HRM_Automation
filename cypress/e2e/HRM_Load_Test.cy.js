@@ -6,11 +6,11 @@ describe("Load Test", () => {
     // failing the test
     return false;
   });
-  let EmployeeNameCount = 11;
-  let CompanyNameCount = 11;
-  let CompanyDetailsCount = 11;
-  let CompanyHRCount = 11;
-  let CompanyHR_emailCount = 11;
+  let EmployeeNameCount = 45;
+  let CompanyNameCount = 45;
+  let CompanyDetailsCount = 45;
+  let CompanyHRCount = 45;
+  let CompanyHR_emailCount = 45;
 
   //Company name counter
   function generaterandomCompanyname() {
@@ -133,6 +133,7 @@ describe("Load Test", () => {
       cy.url().should("eq", "https://hrm.aamarpay.dev/department");
 
       cy.visit("/department");
+      
       cy.get(".btn.add-btn").click({ force: true });
       cy.get('#msform > .input-block > [name="deptTitle"]').type(
         "Hello Department"
@@ -186,6 +187,12 @@ describe("Load Test", () => {
         cy.wait(1000);
 
       }
+
+      //For Logout
+      cy.get(".dropdown-toggle.nav-link").click().within(()=>
+      {
+        cy.contains("Logout").click({force:true});
+      })
     }
   });
 });
