@@ -158,7 +158,9 @@ describe("Load Test", () => {
       cy.get("#desig_form > .submit-section > .btn").click({ force: true });
 
       for (let index = 0; index < 50; index++) {
+        cy.wait(1000);
         cy.visit("/employee");
+        cy.wait(1000);
         cy.get(".btn.add-btn.add-employee").click({ force: true });
         cy.get('#msform > .row > :nth-child(1) > .input-block > .form-control').type(generaterandomEmployeeName());
         cy.get('#msform > .row > :nth-child(2) > .input-block > .form-control').type(generaterandomEmployeeEmail());
