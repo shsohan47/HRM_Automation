@@ -6,11 +6,11 @@ describe("Load Test", () => {
     // failing the test
     return false;
   });
-  let EmployeeNameCount = 52;
-  let CompanyNameCount = 52;
-  let CompanyDetailsCount = 52;
-  let CompanyHRCount = 52;
-  let CompanyHR_emailCount = 52;
+  let EmployeeNameCount = 63;
+  let CompanyNameCount = 63;
+  let CompanyDetailsCount = 63;
+  let CompanyHRCount = 63;
+  let CompanyHR_emailCount = 63;
 
   //Company name counter
   function generaterandomCompanyname() {
@@ -134,6 +134,7 @@ describe("Load Test", () => {
 
       cy.visit("/department");
       cy.get(".btn.add-btn").click({ force: true });
+      cy.wait(1000)
       cy.get('#msform > .input-block > [name="deptTitle"]').type(
         "Hello Department"
       );
