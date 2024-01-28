@@ -6,16 +6,16 @@ describe("Load Test", () => {
     // failing the test
     return false;
   });
-  let EmployeeNameCount = 52;
-  let CompanyNameCount = 52;
-  let CompanyDetailsCount = 52;
-  let CompanyHRCount = 52;
-  let CompanyHR_emailCount = 52;
+  let EmployeeNameCount = 498;
+  let CompanyNameCount = 498;
+  let CompanyDetailsCount = 498;
+  let CompanyHRCount = 498;
+  let CompanyHR_emailCount = 498;
 
   //Company name counter
   function generaterandomCompanyname() {
     var name = "company" + CompanyNameCount;
-    CompanyNameCount++;
+    CompanyNameCount--;
     return name;
   }
   //Generate fully random email for employee
@@ -81,7 +81,7 @@ describe("Load Test", () => {
   it("passes", () => {
     cy.visit("/registration-form");
 
-    for (let i = 0; i < 500; i++) {
+    for (let i = 500; i >250; i--) {
       cy.visit("/registration-form");
       cy.get('[name="companyName"]').type(generaterandomCompanyname(), {
         force: true,
@@ -158,42 +158,42 @@ describe("Load Test", () => {
       });
       cy.get("#desig_form > .submit-section > .btn").click({ force: true });
 
-    
+      cy.wait(1000);
 
       for (let index = 0; index < 20; index++) {
-        cy.wait(3000);
-        cy.visit("/employee");
         
-        cy.get(".btn.add-btn.add-employee").click();
-
+        cy.visit("/employee");
+        cy.wait(1000);
+        cy.get(".btn.add-btn.add-employee").click({ force: true });
+        cy.wait(1000);
         cy.get('#msform > .row > :nth-child(1) > .input-block > .form-control').type(generaterandomEmployeeName());
         cy.get('#msform > .row > :nth-child(2) > .input-block > .form-control').type(generaterandomEmployeeEmail());
         cy.get('#password1').type("123456789");
         cy.get('#password_confirmation').type("123456789");
         cy.get(':nth-child(5) > .input-block > .form-control').type(GenerateMobileNumber());
         cy.get(':nth-child(6) > .input-block > .cal-icon > .form-control').clear().type("1998-01-28");
-        
+        cy.wait(1000)
         cy.get('#select2-selectDept-container').click({force:true});
-        
+        cy.wait(1000)
         cy.get('.select2-dropdown.select2-dropdown--below').within(()=>
         {
           cy.contains("Hello Department").click({force:true})
-          cy.wait(2000)
         })
         cy.get('#msform > .row > :nth-child(8) > .input-block > .select2 > .selection > .select2-selection > .select2-selection__arrow > b').click({force:true})
-        
+        cy.wait(1000)
         cy.get('.select2-dropdown.select2-dropdown--below').within(()=>
         {
           cy.contains("Male").click({force:true});
           
         })
- 
+        cy.wait(1000)
         cy.get('#select2-desig_id-container').click({force:true})
         cy.get('.select2-dropdown.select2-dropdown--below').within(()=>
         {
           cy.contains("Hello Designation").click({force:true});
         })
         cy.get('#msform > .submit-section > .btn').click({force:true});
+        cy.wait(1000);
 
       }
         cy.visit("/department");
