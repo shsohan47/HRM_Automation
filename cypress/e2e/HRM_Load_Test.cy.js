@@ -6,11 +6,19 @@ describe("Load Test", () => {
     // failing the test
     return false;
   });
+<<<<<<< HEAD
   let EmployeeNameCount = 63;
   let CompanyNameCount = 63;
   let CompanyDetailsCount = 63;
   let CompanyHRCount = 63;
   let CompanyHR_emailCount = 63;
+=======
+  let EmployeeNameCount = 45;
+  let CompanyNameCount = 45;
+  let CompanyDetailsCount = 45;
+  let CompanyHRCount = 45;
+  let CompanyHR_emailCount = 45;
+>>>>>>> 80158de73d0137e45259b572886a7e13f548964e
 
   //Company name counter
   function generaterandomCompanyname() {
@@ -133,6 +141,7 @@ describe("Load Test", () => {
       cy.url().should("eq", "https://hrm.aamarpay.dev/department");
 
       cy.visit("/department");
+      
       cy.get(".btn.add-btn").click({ force: true });
       cy.wait(1000)
       cy.get('#msform > .input-block > [name="deptTitle"]').type(
@@ -159,6 +168,7 @@ describe("Load Test", () => {
       });
       cy.get("#desig_form > .submit-section > .btn").click({ force: true });
 
+<<<<<<< HEAD
     
 
       for (let index = 0; index < 20; index++) {
@@ -167,6 +177,13 @@ describe("Load Test", () => {
         
         cy.get(".btn.add-btn.add-employee").click();
 
+=======
+      for (let index = 0; index < 50; index++) {
+        cy.wait(1000);
+        cy.visit("/employee");
+        cy.wait(1000);
+        cy.get(".btn.add-btn.add-employee").click({ force: true });
+>>>>>>> 80158de73d0137e45259b572886a7e13f548964e
         cy.get('#msform > .row > :nth-child(1) > .input-block > .form-control').type(generaterandomEmployeeName());
         cy.get('#msform > .row > :nth-child(2) > .input-block > .form-control').type(generaterandomEmployeeEmail());
         cy.get('#password1').type("123456789");
@@ -197,12 +214,21 @@ describe("Load Test", () => {
         cy.get('#msform > .submit-section > .btn').click({force:true});
 
       }
+<<<<<<< HEAD
         cy.visit("/department");
         cy.get('.nav-item > .dropdown-toggle').click({force:true})
         cy.get(".dropdown-menu.show").within(()=>
         {
           cy.contains("Logout").click({force:true});
         })
+=======
+
+      //For Logout
+      cy.get(".dropdown-toggle.nav-link").click().within(()=>
+      {
+        cy.contains("Logout").click({force:true});
+      })
+>>>>>>> 80158de73d0137e45259b572886a7e13f548964e
     }
   });
 });
