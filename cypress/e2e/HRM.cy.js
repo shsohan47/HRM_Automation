@@ -172,7 +172,7 @@ describe("Hrm admin panel automation Script", () => {
 function response (Url_name)
 {
   cy.request(Url_name).then((response) => {
-    if (response.status === 500) {
+    if (response.status == 500) {
       cy.log("The server responding 500 internal server error");
     } else {
       expect(response.status).to.eq(200);
@@ -317,7 +317,7 @@ function response (Url_name)
 
 
   //Test Script For Attendance Functionality 
-  it.only("Test Script For Attendance Functionality Add attendance Search Attendance",()=>
+  it("Test Script For Attendance Functionality Add attendance Search Attendance",()=>
   {
     response("/attendance-list")
     cy.visit("/attendance-list");
@@ -359,13 +359,31 @@ function response (Url_name)
     })
     cy.get('#msform > .submit-section > .btn').click();
 
-
-    //Check weather this attendance include in database or not
-    cy.get('.form-control').type("2024-01-28T10:00:00");
-    cy.get('[style="margin-top: 18px;"] > .btn').click();
-    cy.get("table td:nth-child(2)").should("contains","1/28/2024")
+    
+   
 
 
   })
+  it.only("Check all functionality of attendance list",()=>
+    {
+       //Check weather this attendance include in database or not
+    cy.visit("/attendance-list");
+    cy.get('#date').type("2024-01-28");
+    cy.get('[style="margin-top: 18px;"] > .btn').click();
+    cy.wait(2000)
+    cy.get("table").should("be.visible");
+    cy.get("table tr:nth-child(1) td").eq(2).should("contain","1/28/2024");
+
+
+    //Can edit the selected attendance
+    cy.get("table tr:nth-child(1) td").last().scrollIntoView();
+    
+      cy.get(".material-icons").click()
+      cy.get(".dropdown-menu.dropdown-menu-right.show").within(()=>
+      {
+        cy.contains("Edit").click();
+      })
+    
+    })
 
 });
