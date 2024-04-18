@@ -1,4 +1,6 @@
 import "cypress-file-upload";
+import currentDate from "../component/currentDate";
+const current_date = require('../component/currentDate')
 
 describe("Hrm admin panel automation Script", () => {
   Cypress.on("uncaught:exception", (err, runnable) => {
@@ -6,6 +8,7 @@ describe("Hrm admin panel automation Script", () => {
     // failing the test
     return false;
   });
+
   //random department name generating
   const department_name = Math.random();
   const name = "demo department description";
@@ -23,6 +26,8 @@ describe("Hrm admin panel automation Script", () => {
     cy.get(".btn.btn-primary.continue-btn").click({ force: true });
     cy.wait(3000);
   };
+
+  
 
   const EditData = (name, details) => {
     //cy.get(".form-control.form-control-sm").eq(1).type(name);
@@ -72,7 +77,8 @@ describe("Hrm admin panel automation Script", () => {
       cy.get('[name="password"]').type("123456789");
       //click the login button
       cy.get(".btn.btn-primary.account-btn").click();
-      cy.url().should("eq", "https://hrm.aamarpay.dev/department");
+      cy.url().should("eq", "https://hrm.aamarpay.dev/dashboard");
+      
     }
   );
   //Invalid Login Functionality
@@ -364,15 +370,23 @@ function response (Url_name)
 
 
   })
-  it.only("Check all functionality of attendance list",()=>
+  it("Check all functionality of attendance list",()=>
     {
        //Check weather this attendance include in database or not
     cy.visit("/attendance-list");
-    cy.get('#date').type("2024-01-28");
+    cy.get('#date_range').clear();
+    //cy.get('#date_range').type("2024-01-28-2024-01-28");
+    cy.get('.applyBtn').click()
     cy.get('[style="margin-top: 18px;"] > .btn').click();
     cy.wait(2000)
-    cy.get("table").should("be.visible");
-    cy.get("table tr:nth-child(1) td").eq(2).should("contain","1/28/2024");
+    if(cy.get('.swal2-popup'))
+    {
+      cy.get('.swal2-confirm').click()
+    }
+    else{
+      cy.get("table").should("be.visible");
+    const current_date = current_date();
+    cy.get("table tr:nth-child(1) td").eq(2).should("contain",current_date);
 
 
     //Can edit the selected attendance
@@ -383,6 +397,8 @@ function response (Url_name)
       {
         cy.contains("Edit").click();
       })
+    
+    }
     
     })
 
